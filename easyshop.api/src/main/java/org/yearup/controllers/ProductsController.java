@@ -24,13 +24,13 @@ public class ProductsController
         this.productDao = productDao;
     }
 
-    @GetMapping("")
+    @GetMapping("/products")
     @PreAuthorize("permitAll()")
-    public List<Product> search(@RequestParam(name="cat", required = false) Integer categoryId,
-                                @RequestParam(name="minPrice", required = false) BigDecimal minPrice,
-                                @RequestParam(name="maxPrice", required = false) BigDecimal maxPrice,
-                                @RequestParam(name="color", required = false) String color
-                                )
+    public List<Product> search
+            (@RequestParam(name="cat", required = false) Integer categoryId,
+             @RequestParam(name="minPrice", required = false) BigDecimal minPrice,
+             @RequestParam(name="maxPrice", required = false) BigDecimal maxPrice,
+             @RequestParam(name="color", required = false) String color)
     {
         try
         {
