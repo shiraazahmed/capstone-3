@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Component
-public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
+public abstract class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
 {
     public MySqlCategoryDao(DataSource dataSource)
     {
