@@ -14,8 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("products")
 @CrossOrigin
-public class ProductsController
-{
+public class ProductsController {
     private ProductDao productDao;
 
     @Autowired
@@ -24,7 +23,7 @@ public class ProductsController
         this.productDao = productDao;
     }
 
-    @GetMapping("/products")
+    @GetMapping("")
     @PreAuthorize("permitAll()")
     public List<Product> search
             (@RequestParam(name="cat", required = false) Integer categoryId,
@@ -75,13 +74,13 @@ public class ProductsController
         }
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/products/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void updateProduct(@PathVariable int id, @RequestBody Product product)
     {
         try
         {
-            productDao.create(product);
+            productDao.update(id,product);
         }
         catch(Exception ex)
         {
