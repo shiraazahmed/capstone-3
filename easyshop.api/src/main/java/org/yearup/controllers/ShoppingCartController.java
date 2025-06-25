@@ -11,6 +11,7 @@ import org.yearup.models.ShoppingCartItem;
 import org.yearup.models.User;
 
 import java.security.Principal;
+import java.sql.SQLException;
 
 // convert this class to a REST controller
 // only logged in users should have access to these actions
@@ -18,9 +19,9 @@ import java.security.Principal;
 @RequestMapping("/cart")
 public class ShoppingCartController {
     // a shopping cart requires
-    private ShoppingCartDao shoppingCartDao;
-    private UserDao userDao;
-    private ProductDao productDao;
+    private final ShoppingCartDao shoppingCartDao;
+    private final UserDao userDao;
+    private final ProductDao productDao;
 
     public ShoppingCartController(ShoppingCartDao shoppingCartDao, UserDao userDao, ProductDao productDao) {
         this.shoppingCartDao = shoppingCartDao;
@@ -31,6 +32,9 @@ public class ShoppingCartController {
     // each method in this controller requires a Principal object as a parameter
     @GetMapping
     public ShoppingCart getCart(Principal principal) {
+        if (principal == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+        }
         try
         {
             // get the currently logged in username
@@ -47,8 +51,12 @@ public class ShoppingCartController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
     }
-    @PostMapping
+    @PostMapping("/products/{productId}")
+    @ResponseStatus(HttpStatus.CREATED)
     public void addProduct(@PathVariable int productId, Principal principal) {
+        if (principal == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+        }
         String userName = principal.getName();
         User user = userDao.getByUserName(userName);
         int userId = user.getId();
@@ -56,10 +64,23 @@ public class ShoppingCartController {
     }
     @PutMapping("/products/{productId}")
     public void updateProduct(@PathVariable int productId, @RequestBody ShoppingCartItem item, Principal principal) {
+        if (principal == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+        }
         String userName = principal.getName();
         User user = userDao.getByUserName(userName);
         int userId = user.getId();
         shoppingCartDao.updateProduct(userId, productId, item.getQuantity());
+    }
+    @DeleteMapping
+    public void deleteProduct(Principal principal) throws SQLException {
+        if (principal == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+        }
+        String userName = principal.getName();
+        User user = userDao.getByUserName(userName);
+        int userId = user.getId();
+        shoppingCartDao.deleteProduct(userId);
     }
 
     // addProduct a POST method to addProduct a product to the cart - the url should be
