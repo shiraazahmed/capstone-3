@@ -1,7 +1,9 @@
 package org.yearup.data.mysql;
 
 import org.springframework.stereotype.Repository;
+import org.yearup.data.ProductDao;
 import org.yearup.data.ShoppingCartDao;
+import org.yearup.models.Product;
 import org.yearup.models.ShoppingCart;
 import org.yearup.models.ShoppingCartItem;
 
@@ -19,9 +21,11 @@ import java.util.Map;
 public class MySqlShoppingCartDao implements ShoppingCartDao {
 
     private final DataSource dataSource;
+    private final ProductDao productDao;
 
     public MySqlShoppingCartDao(DataSource dataSource) {
         this.dataSource = dataSource;
+        this.productDao = new MySqlProductDao(dataSource);
     }
 
     @Override
@@ -36,14 +40,15 @@ public class MySqlShoppingCartDao implements ShoppingCartDao {
         Map<Integer, ShoppingCartItem> items = new HashMap<>();
 
         try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 int productId = resultSet.getInt("product_id");
                 int quantity = resultSet.getInt("quantity");
+                Product product = productDao.getById(productId);
                 ShoppingCartItem item = new ShoppingCartItem();
-                item.setProductId(productId);
+                item.setProduct(product);
                 item.setQuantity(quantity);
                 items.put(productId, item);
             }
@@ -66,21 +71,7 @@ public class MySqlShoppingCartDao implements ShoppingCartDao {
             statement.setInt(1, userId);
             statement.setInt(2, productId);
             statement.executeUpdate();
-//            ResultSet resultSet = statement.executeQuery();
-//            if (resultSet.next()) {
-//                try (PreparedStatement updateStatement = connection.prepareStatement(sql)) {
-//                    updateStatement.setInt(1, userId);
-//                    updateStatement.setInt(2, productId);
-//                    updateStatement.executeUpdate();
-//                }
-//            }
-//            else {
-//                try (PreparedStatement insertStatement = connection.prepareStatement(sql)) {
-//                    insertStatement.setInt(1, userId);
-//                    insertStatement.setInt(2, productId);
-//                    insertStatement.executeUpdate();
-//                }
-//            }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
