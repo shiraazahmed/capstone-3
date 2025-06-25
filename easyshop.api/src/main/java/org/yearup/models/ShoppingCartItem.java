@@ -46,8 +46,16 @@ public class ShoppingCartItem
     {
         return this.product.getProductId();
     }
+    @JsonIgnore
+    public int setProductId(int productId)
+    {
+        this.product.setProductId(productId);
+        return productId;
+    }
+
 
     public BigDecimal getLineTotal()
+
     {
         BigDecimal basePrice = product.getPrice();
         BigDecimal quantity = new BigDecimal(this.quantity);

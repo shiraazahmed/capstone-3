@@ -12,8 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class MySqlUserDao extends MySqlDaoBase implements UserDao
-{
+public class MySqlUserDao extends MySqlDaoBase implements UserDao {
     @Autowired
     public MySqlUserDao(DataSource dataSource)
     {
