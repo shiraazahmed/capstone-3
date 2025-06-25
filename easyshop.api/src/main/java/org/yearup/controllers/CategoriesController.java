@@ -11,10 +11,10 @@ import org.yearup.models.Product;
 
 import java.util.List;
 
-// add the annotations to make this a REST controller
-// add the annotation to make this controller the endpoint for the following url
+// addProduct the annotations to make this a REST controller
+// addProduct the annotation to make this controller the endpoint for the following url
     // http://localhost:8080/categories
-// add annotation to allow cross site origin requests
+// addProduct annotation to allow cross site origin requests
 @RestController
 @RequestMapping("/categories")
 @CrossOrigin
@@ -32,13 +32,13 @@ public class CategoriesController {
 
     // create an Autowired controller to inject the categoryDao and ProductDao
 
-    // add the appropriate annotation for a get action
+    // addProduct the appropriate annotation for a get action
     @RequestMapping(method = RequestMethod.GET)
     public List<Category> getAllCategories() {
         return categoryDao.getAllCategories();
     }
 
-    // add the appropriate annotation for a get action
+    // addProduct the appropriate annotation for a get action
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public Category getById(@PathVariable int id)
     {
@@ -55,8 +55,8 @@ public class CategoriesController {
         return productDao.listByCategoryId(categoryId);
     }
 
-    // add annotation to call this method for a POST action
-    // add annotation to ensure that only an ADMIN can call this function
+    // addProduct annotation to call this method for a POST action
+    // addProduct annotation to ensure that only an ADMIN can call this function
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public Category addCategory(@RequestBody Category category) {
@@ -64,8 +64,8 @@ public class CategoriesController {
         // insert the category
     }
 
-    // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
-    // add annotation to ensure that only an ADMIN can call this function
+    // addProduct annotation to call this method for a PUT (update) action - the url path must include the categoryId
+    // addProduct annotation to ensure that only an ADMIN can call this function
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public void updateCategory(@PathVariable int id, @RequestBody Category category) {
         // update the category by id
@@ -74,8 +74,8 @@ public class CategoriesController {
     }
 
 
-    // add annotation to call this method for a DELETE action - the url path must include the categoryId
-    // add annotation to ensure that only an ADMIN can call this function
+    // addProduct annotation to call this method for a DELETE action - the url path must include the categoryId
+    // addProduct annotation to ensure that only an ADMIN can call this function
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable int id) {
