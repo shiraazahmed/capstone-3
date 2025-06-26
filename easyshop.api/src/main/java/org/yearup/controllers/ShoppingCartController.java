@@ -1,6 +1,9 @@
 package org.yearup.controllers;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.ProductDao;
@@ -17,12 +20,15 @@ import java.sql.SQLException;
 // only logged in users should have access to these actions
 @RestController
 @RequestMapping("/cart")
+@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+@CrossOrigin
 public class ShoppingCartController {
     // a shopping cart requires
     private final ShoppingCartDao shoppingCartDao;
     private final UserDao userDao;
     private final ProductDao productDao;
 
+    @Autowired
     public ShoppingCartController(ShoppingCartDao shoppingCartDao, UserDao userDao, ProductDao productDao) {
         this.shoppingCartDao = shoppingCartDao;
         this.userDao = userDao;
