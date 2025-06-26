@@ -39,7 +39,7 @@ public class ShoppingCartController {
     @GetMapping
     public ShoppingCart getCart(Principal principal) {
         if (principal == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User ERROR!");
         }
         try
         {
@@ -50,7 +50,7 @@ public class ShoppingCartController {
             int userId = user.getId();
             ShoppingCart item = shoppingCartDao.getCart(userId);
             if (item == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Shopping cart not found for user: " + userName);
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Shopping Cart NOT FOUND! " + userName);
             }
 
             // use the shoppingcartDao to get all items in the cart and return the cart
@@ -65,14 +65,14 @@ public class ShoppingCartController {
     @ResponseStatus(HttpStatus.CREATED)
     public ShoppingCart addProduct(@PathVariable int productId, Principal principal) {
         if (principal == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User ERROR!");
         }
         try {
             String userName = principal.getName();
             User user = userDao.getByUserName(userName);
             int userId = user.getId();
             if (productDao.getById(productId) == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with ID: " + productId);
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ID NOT FOUND!: " + productId);
             }
             shoppingCartDao.addProduct(userId, productId);
             return shoppingCartDao.getCart(userId);
@@ -85,7 +85,7 @@ public class ShoppingCartController {
     @PutMapping("/products/{productId}")
     public void updateProduct(@PathVariable int productId, @RequestBody ShoppingCartItem item, Principal principal) {
         if (principal == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User ERROR!");
         }
         String userName = principal.getName();
         User user = userDao.getByUserName(userName);
@@ -95,7 +95,7 @@ public class ShoppingCartController {
     @DeleteMapping
     public void deleteProduct(Principal principal) throws SQLException {
         if (principal == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User ERROR!");
         }
         String userName = principal.getName();
         User user = userDao.getByUserName(userName);
